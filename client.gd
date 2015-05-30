@@ -20,7 +20,7 @@ func _ready():
 	set_process(true)
 		
 func _process(delta):
-	if !connected: #if last time the status was STATUS_CONNECTING
+	if !connected: 
 		if connection.get_status()==connection.STATUS_CONNECTED:
 			debug.add_text("Connected to "+ip+":"+str(port));debug.newline()
 			connected=true
