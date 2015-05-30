@@ -17,26 +17,20 @@ func _ready():
 	connection.connect(ip,port) #inherits constants from StreamPeerTCP
 	peerstream=PacketPeerStream.new()
 	peerstream.set_stream_peer(connection)
-	#get_status returns one of following:
-	if connection.get_status()==connection.STATUS_CONNECTED:
-		debug.add_text("Connected to "+ip+":"+str(port));debug.newline()
-		set_process(true) #start processing if connected
-		connected=true
-	elif connection.get_status()==connection.STATUS_CONNECTING:
-		debug.add_text("Trying to connect to "+ip+":"+str(port));debug.newline()
-		set_process(true)
-	elif connection.get_status()==connection.STATUS_NONE or connection.get_status()==connection.STATUS_ERROR:
-		debug.add_text("Failed to connect to "+ip+":"+str(port));debug.newline()
+	set_process(true)
 		
 func _process(delta):
 	if !connected: #if last time the status was STATUS_CONNECTING
 		if connection.get_status()==connection.STATUS_CONNECTED:
 			debug.add_text("Connected to "+ip+":"+str(port));debug.newline()
 			connected=true
-			return #skips this process run
-		if connection.get_status()==connection.STATUS_NONE or connection.get_status()==connection.STATUS_ERROR:
-			debug.add_text("Server disconnected?")
-			set_process(false)
+		elif connection.get_status()==connection.STATUS_CONNECTING:
+			debug.add_text("Trying to connect to "+ip+":"+str(port));debug.newline()
+		elif connection.get_status()==connection.STATUS_NONE or connection.get_status()==connection.STATUS_ERROR:
+			debug.add_text("Failed to connect to "+ip+":"+str(port));debug.newline()
+	if connection.get_status()==connection.STATUS_NONE or connection.get_status()==connection.STATUS_ERROR:
+		debug.add_text("Server disconnected?")
+		set_process(false)
 	peerstream.get_available_packet_count()
 
 
