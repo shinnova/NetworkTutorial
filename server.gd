@@ -11,7 +11,6 @@ var peerstream = [] # for holding multiple data transfer (PacketPeerStream) obje
 func _ready():
 	debug = get_node("Debug")
 	server=TCP_Server.new()
-	server.listen(port) #1250
 	
 	if server.listen(port)==0:
 		debug.add_text("Server started on port "+str(port));debug.newline()
